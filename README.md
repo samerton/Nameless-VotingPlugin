@@ -12,3 +12,4 @@ A VotingPlugin module for the NamelessMC website software. Displays a list of th
 
 ## Notes:
 - Not compatible with other NamelessMC vote modules
+- If you are using a custom template, make sure you add the template file (in the **custom/templates/Default** directory) to your custom template!

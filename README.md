@@ -9,7 +9,7 @@ A VotingPlugin module for the NamelessMC website software. Displays a list of th
 - Upload the contents of the **upload** directory straight into your NamelessMC installation's directory
 - Activate the module in the AdminCP -> Modules tab
 - Insert your VotingPlugin database details into the file **modules/VotingPlugin/config.php**
-- Set up some vote sites in the AdminCP -> Modules tab
+- Set up some vote sites in the AdminCP -> Vote tab
 
 ## Notes:
 - Not compatible with other NamelessMC vote modules

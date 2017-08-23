@@ -29,5 +29,10 @@ $language = array(
 	'url_min_8' => 'Please ensure your site URL is a minimum of 8 characters, including the preceding http://',
 	'name_max_64' => 'Please ensure your site name is a maximum of 64 characters',
 	'url_max_256' => 'Please ensure your site URL is a maximum of 256 characters',
-	'site_edited_successfully' => 'Site edited successfully.'
+	'site_edited_successfully' => 'Site edited successfully.',
+	'this_month' => 'This month',
+	'this_week' => 'This week',
+	'today' => 'Today',
+	'all_time' => 'All Time',
+	'order' => 'Order'
 );

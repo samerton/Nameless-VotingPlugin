@@ -11,7 +11,21 @@
 				<div class="row">
 					<div class="col-md-7">
 						{* Top voters *}
-						<h3>{$TOP_VOTERS}</h3>
+						<h3 style="display:inline;">{$TOP_VOTERS}</h3>
+						<span class="pull-right">
+						  <div class="dropdown">
+						    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							  {$ORDER}
+						    </button>
+						    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							  <a class="dropdown-item" href="{$TODAY_LINK}">{$TODAY}</a>
+							  <a class="dropdown-item" href="{$THIS_WEEK_LINK}">{$THIS_WEEK}</a>
+							  <a class="dropdown-item" href="{$THIS_MONTH_LINK}">{$THIS_MONTH}</a>
+							  <a class="dropdown-item" href="{$ALL_TIME_LINK}">{$ALL_TIME}</a>
+						    </div>
+						  </div>
+						</span>
+						<br /><br />
 						{if count($RESULTS)}
 						  <table class="table table-responsive dataTables-topList">
 							<colgroup>

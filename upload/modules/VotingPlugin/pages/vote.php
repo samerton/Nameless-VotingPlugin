@@ -20,6 +20,7 @@ define('PAGE', 'vote');
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<meta name="description" content="View top voters and a list of vote sites for the <?php echo $sitename; ?> community" />
 
     <!-- Site Properties -->
 	<?php 
@@ -45,10 +46,31 @@ define('PAGE', 'vote');
 				$table = $mysqli->real_escape_string($voting_plugin['table']);
 				
 				// Get ordering
-				$order = 'MonthTotal';
-				$order_text = $votingplugin_language->get('language', 'top_monthly_voters');
-				
-				if($stmt = $mysqli->prepare("SELECT uuid, PlayerName, MonthTotal, AllTimeTotal, DailyTotal, WeeklyTotal FROM $table WHERE MonthTotal IS NOT NULL ORDER BY $order LIMIT 25")){
+				if(isset($_GET['order'])){
+					switch($_GET['order']){
+						case 'all':
+							$order = 'AllTimeTotal';
+							$table_order = 4;
+						break;
+						case 'daily':
+							$order = 'DailyTotal';
+							$table_order = 1;
+						break;
+						case 'weekly':
+							$order = 'WeeklyTotal';
+							$table_order = 2;
+						break;
+						default:
+							$order = 'MonthTotal';
+							$table_order = 3;
+						break;
+					}
+				} else {
+					$order = 'MonthTotal';
+					$table_order = 3;
+				}
+
+				if($stmt = $mysqli->prepare("SELECT uuid, PlayerName, MonthTotal, AllTimeTotal, DailyTotal, WeeklyTotal FROM $table WHERE $order IS NOT NULL ORDER BY $order * 1 DESC LIMIT 25")){
 					$stmt->execute();
 					
 					$stmt->bind_result($uuid, $name, $monthly, $alltime, $daily, $weekly);
@@ -99,7 +121,16 @@ define('PAGE', 'vote');
 						'WEEKLY_VOTES' => $votingplugin_language->get('language', 'weekly_votes'),
 						'MONTHLY_VOTES' => $votingplugin_language->get('language', 'monthly_votes'),
 						'ALL_TIME_VOTES' => $votingplugin_language->get('language', 'all_time_votes'),
-						'TOP_VOTERS' => $votingplugin_language->get('language', 'top_voters')
+						'TOP_VOTERS' => $votingplugin_language->get('language', 'top_voters'),
+						'THIS_MONTH' => $votingplugin_language->get('language', 'this_month'),
+						'THIS_WEEK' => $votingplugin_language->get('language', 'this_week'),
+						'TODAY' => $votingplugin_language->get('language', 'today'),
+						'ALL_TIME' => $votingplugin_language->get('language', 'all_time'),
+						'THIS_MONTH_LINK' => URL::build('/vote/', 'order=monthly'),
+						'THIS_WEEK_LINK' => URL::build('/vote/', 'order=weekly'),
+						'TODAY_LINK' => URL::build('/vote/', 'order=daily'),
+						'ALL_TIME_LINK' => URL::build('/vote/', 'order=all'),
+						'ORDER' => $votingplugin_language->get('language', 'order')
 					));
 				} else {
 					$smarty->assign('ERROR', $votingplugin_language->get('language', 'unable_to_get_data'));
@@ -138,7 +169,7 @@ define('PAGE', 'vote');
 				bFilter: false,
 				bInfo: false,
 				pageLength: 25,
-				order: [[3, 'desc']]
+				order: [[<?php echo $table_order; ?>, 'desc']]
             });
 		});
 	</script>

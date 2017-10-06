@@ -51,4 +51,12 @@ $admin_sidebar['vote'] = array(
 	'url' => URL::build('/admin/vote')
 );
 
-$navigation->add('vote', $votingplugin_language->get('language', 'vote'), URL::build('/vote'));
+// Check cache for navbar link order
+$cache->setCache('navbar_order');
+if(!$cache->isCached('vote_order')){
+    $vote_order = 5;
+    $cache->store('vote_order', 5);
+} else {
+    $vote_order = $cache->retrieve('vote_order');
+}
+$navigation->add('vote', $votingplugin_language->get('language', 'vote'), URL::build('/vote'), 'top', null, $vote_order);

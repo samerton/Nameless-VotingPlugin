@@ -1,18 +1,19 @@
+{include file='header.tpl'}
 {include file='navbar.tpl'}
 
 <div class="container">
     <div class="card">
-        <div class="card-block">
+        <div class="card-body">
             {if isset($CONFIGURE)}
 				<div class="alert alert-info">{$CONFIGURE}</div>
 			{else if isset($ERROR)}
 				<div class="alert alert-danger">{$ERROR}</div>
 			{else}
 				<div class="row">
-					<div class="col-md-7">
+					<div class="col-md-8">
 						{* Top voters *}
-						<h3 style="display:inline;">{$TOP_VOTERS}</h3>
-						<span class="pull-right">
+						<h2 style="display:inline;">{$TOP_VOTERS}</h2>
+						<div class="float-right">
 						  <div class="dropdown">
 						    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							  {$ORDER}
@@ -24,7 +25,7 @@
 							  <a class="dropdown-item" href="{$ALL_TIME_LINK}">{$ALL_TIME}</a>
 						    </div>
 						  </div>
-						</span>
+						</div>
 						<br /><br />
 						{if count($RESULTS)}
 						  <table class="table table-responsive dataTables-topList">
@@ -60,11 +61,11 @@
 					
 					</div>
 					
-					<div class="col-md-5">
+					<div class="col-md-4">
 						{* Display sites *}
 						<h3>{$VOTE_SITES}</h3>
 						{foreach from=$VOTE_SITES_LIST item=site}
-							<a href="{$site->site|escape:'htmlall'}" target="_blank" rel="noopener nofollow" class="btn btn-primary btn-block">{$site->name|escape:'htmlall'}</a>
+							<a href="{$site.site}" target="_blank" rel="noopener nofollow" class="btn btn-primary btn-block">{$site.name}</a>
 						{/foreach}
 					</div>
 				</div>

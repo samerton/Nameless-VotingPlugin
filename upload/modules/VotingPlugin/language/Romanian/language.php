@@ -35,5 +35,15 @@ $language = array(
 	'this_week' => 'Săptămâna aceasta',
 	'today' => 'Astăzi',
 	'all_time' => 'Tot timpul',
-	'order' => 'Ordonează'
+	'order' => 'Ordonează',
+	'icon_example' => 'Example: <i class="fa fa-thumbs-up" aria-hidden="true"></i>',
+	'message' => 'Message to display at top of Vote page <em>(This can be left blank)</em>',
+	'message_maximum' => 'Your vote message must be a maximum of 2048 characters',
+	'edit_site' => 'Editing site',
+	'delete_site' => 'Are you sure you want to delete this site?',
+	'site_created_successfully' => 'Site created successfully.',
+	'site_deleted_successfully' => 'Site deleted successfully.',
+	'updated_successfully' => 'Updated successfully',
+	'config_not_writable' => 'Unable to create VotingPlugin config. Please ensure the <strong>modules/VotingPlugin</strong> directory is writable, and then disable + re-enable the module.',
+	'please_configure_module' => 'Please configure the module in the file <strong>modules/VotingPlugin/config.php</strong> first.'
 );

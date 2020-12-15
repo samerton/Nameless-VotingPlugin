@@ -63,6 +63,7 @@
                         {/if}
                     </div>
                 </div>
+                
                 <div class="sixteen wide mobile six wide tablet four wide computer column">
                     {* Display sites *}
                     <div class="ui padded segment">
@@ -74,6 +75,7 @@
                 </div>
             </div>
         </div>
-    {/if}
+    </div>
+{/if}
 
 {include file='footer.tpl'}

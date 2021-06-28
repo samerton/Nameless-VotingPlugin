@@ -11,7 +11,7 @@
 
 // Can the user view the StaffCP?
 if($user->isLoggedIn()){
-	if(!$user->canViewACP()){
+	if(!$user->canViewStaffCP()){
 		// No
 		Redirect::to(URL::build('/'));
 		die();
@@ -255,7 +255,7 @@ if(isset($_GET['action'])){
 
 					// Update Icon cache
 					$cache->setCache('navbar_icons');
-					$cache->store('voting_plugin_icon', Input::get('icon'));
+					$cache->store('vote_icon', Input::get('icon'));
 
 					// Update Vote Message
 					$message_id = $queries->getWhere('vote_settings', array('name', '=', 'vote_message'));
@@ -295,7 +295,7 @@ if(isset($_GET['action'])){
 
 	// Retrieve Icon from cache
 	$cache->setCache('navbar_icons');
-	$icon = $cache->retrieve('voting_plugin_icon');
+	$icon = $cache->retrieve('vote_icon');
 
 	// Get vote
 	$vote_message = $queries->getWhere('vote_settings', array('name', '=', 'vote_message'));

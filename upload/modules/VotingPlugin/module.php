@@ -18,8 +18,8 @@ class VotingPlugin_Module extends Module {
 
 		$name = 'VotingPlugin';
 		$author = '<a href="https://samerton.me" target="_blank" rel="nofollow noopener">Samerton</a>';
-		$module_version = '1.0.1';
-		$nameless_version = '2.0.0-pr7';
+		$module_version = '1.0.2';
+		$nameless_version = '2.0.0-pr10';
 
 		parent::__construct($this, $name, $author, $module_version, $nameless_version);
 
@@ -106,20 +106,20 @@ class VotingPlugin_Module extends Module {
 
 		// Navigation icon
 		$cache->setCache('navbar_icons');
-		if(!$cache->isCached('voting_plugin_icon')) {
+		if(!$cache->isCached('vote_icon')) {
 			$icon = '';
 		} else {
-			$icon = $cache->retrieve('voting_plugin_icon');
+			$icon = $cache->retrieve('vote_icon');
 		}
 
 		// Navigation order
 		$cache->setCache('navbar_order');
-		if(!$cache->isCached('voting_plugin_order')){
+		if(!$cache->isCached('vote_order')){
 			// Create cache entry now
 			$vote_order = 3;
-			$cache->store('voting_plugin_order', 3);
+			$cache->store('vote_order', 3);
 		} else {
-			$vote_order = $cache->retrieve('voting_plugin_order');
+			$vote_order = $cache->retrieve('vote_order');
 		}
 
 		switch($link_location){

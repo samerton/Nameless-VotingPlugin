@@ -45,5 +45,15 @@ $language = array(
 	'site_deleted_successfully' => 'Site deleted successfully.',
 	'updated_successfully' => 'Updated successfully',
 	'config_not_writable' => 'Unable to create VotingPlugin config. Please ensure the <strong>modules/VotingPlugin</strong> directory is writable, and then disable + re-enable the module.',
-	'please_configure_module' => 'Please configure the module in the file <strong>modules/VotingPlugin/config.php</strong> first.'
+	'please_configure_module' => 'Please configure the module in the file <strong>modules/VotingPlugin/config.php</strong> first.',
+	'link_location' => 'Link location',
+	'icon' => 'Icon',
+
+	// Validation
+	'site_name_required' => 'Site name is required',
+	'site_name_minimum' => 'Site name must be a minimum of 2 characters',
+	'site_name_maximum' => 'Site name must be a maximum of 64 characters',
+	'site_url_required'=> 'Site URL is required',
+	'site_url_minimum' => 'Site URL must be a minimum of 10 characters',
+	'site_url_maximum' => 'Site URL must be a maximum of 255 characters'
 );

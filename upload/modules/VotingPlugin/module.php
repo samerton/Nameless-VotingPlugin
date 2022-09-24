@@ -2,7 +2,7 @@
 /*
  *	Made by Samerton
  *  https://github.com/NamelessMC/Nameless/
- *  NamelessMC version 2.0.0-pr7
+ *  NamelessMC version 2.0.2
  *
  *  License: MIT
  *
@@ -18,8 +18,8 @@ class VotingPlugin_Module extends Module {
 
 		$name = 'VotingPlugin';
 		$author = '<a href="https://samerton.me" target="_blank" rel="nofollow noopener">Samerton</a>';
-		$module_version = '1.0.2';
-		$nameless_version = '2.0.0-pr10';
+		$module_version = '1.0.3';
+		$nameless_version = '2.0.2';
 
 		parent::__construct($this, $name, $author, $module_version, $nameless_version);
 
@@ -60,7 +60,7 @@ class VotingPlugin_Module extends Module {
 
 		try {
 			// Update main admin group permissions
-			$group = $queries->getWhere('groups', array('id', '=', 2));
+			$group = DB::getInstance()->get('groups', ['id', '=', 2])->results();
 			$group = $group[0];
 
 			$group_permissions = json_decode($group->permissions, TRUE);
@@ -197,4 +197,8 @@ class VotingPlugin_Module extends Module {
 				define('VOTING_PLUGIN', true);
 		}
 	}
+	
+	public function getDebugInfo(): array {
+        return [];
+    }
 }

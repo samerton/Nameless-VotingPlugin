@@ -2,7 +2,7 @@
 /*
  *	Made by Samerton
  *  https://github.com/NamelessMC/Nameless/
- *  NamelessMC version 2.0.0-pr7
+ *  NamelessMC version 2.0.2
  *
  *  License: MIT
  *
@@ -32,6 +32,7 @@ if($user->isLoggedIn()){
 }
 
 
+
 define('PAGE', 'panel');
 define('PARENT_PAGE', 'vote');
 define('PANEL_PAGE', 'vote');
@@ -45,27 +46,29 @@ if(isset($_GET['action'])){
 				$errors = array();
 				if(Token::check(Input::get('token'))){
 					// process addition of site
-					$validate = new Validate();
-					$validation = $validate->check($_POST, array(
-						'vote_site_name' => array(
-							'required' => true,
-							'min' => 2,
-							'max' => 64
-						),
-						'vote_site_url' => array(
-							'required' => true,
-							'min' => 10,
-							'max' => 255
-						)
-					));
+ 
+					
+					$validation = Validate::check($_POST, [
+						'vote_site_name' => [
+							Validate::REQUIRED => true,
+							Validate::MIN => 2,
+							Validate::MAX => 64
+						],
+						'vote_site_url' => [
+							Validate::REQUIRED => true,
+							Validate::MIN => 10,
+							Validate::MAX => 255
+						]
+						
+					]);
 
 					if($validation->passed()){
 						// input into database
 						try {
-							$queries->create('vote_sites', array(
-								'site' => Output::getClean(Input::get('vote_site_url')),
-								'name' => Output::getClean(Input::get('vote_site_name'))
-							));
+							DB::getInstance()->insert('vote_sites', [
+								'site' => htmlspecialchars(Input::get('vote_site_url')),
+								'name' => htmlspecialchars(Input::get('vote_site_name'))
+							]);
 							Session::flash('staff_vote', $votingplugin_language->get('language', 'site_created_successfully'));
 							Redirect::to(URL::build('/panel/vote'));
 							die();
@@ -116,7 +119,7 @@ if(isset($_GET['action'])){
 				Redirect::to(URL::build('/panel/vote'));
 				die();
 			}
-			$site = $queries->getWhere('vote_sites', array('id', '=', $_GET['id']));
+			$site = DB::getInstance()->get('vote_sites', ['id', '=', $_GET['id']])->results();
 			if(!count($site)){
 				Redirect::to(URL::build('/panel/vote'));
 				die();
@@ -127,27 +130,26 @@ if(isset($_GET['action'])){
 				$errors = array();
 				if(Token::check(Input::get('token'))){
 					// process addition of site
-					$validate = new Validate();
-					$validation = $validate->check($_POST, array(
-						'vote_site_name' => array(
-							'required' => true,
-							'min' => 2,
-							'max' => 64
-						),
-						'vote_site_url' => array(
-							'required' => true,
-							'min' => 10,
-							'max' => 255
-						)
-					));
+					$validation = Validate::check($_POST, [
+						'vote_site_name' => [
+							Validate::REQUIRED => true,
+							Validate::MIN => 2,
+							Validate::MAX => 64
+						],
+						'vote_site_url' => [
+							Validate::REQUIRED => true,
+							Validate::MIN => 10,
+							Validate::MAX => 255
+						]
+                    ]);
 
 					if($validation->passed()){
 						// input into database
 						try {
-							$queries->update('vote_sites', $site->id, array(
-								'site' => Output::getClean(Input::get('vote_site_url')),
-								'name' => Output::getClean(Input::get('vote_site_name'))
-							));
+							DB::getInstance()->update('vote_sites', $site->id, [
+								'site' => htmlspecialchars(Input::get('vote_site_url')),
+								'name' => htmlspecialchars(Input::get('vote_site_name'))
+							]);
 							Session::flash('staff_vote', $votingplugin_language->get('language', 'site_edited_successfully'));
 							Redirect::to(URL::build('/panel/vote'));
 							die();
@@ -198,7 +200,7 @@ if(isset($_GET['action'])){
 		case 'delete':
 			if(isset($_GET['id']) && is_numeric($_GET['id'])){
 				try {
-					$queries->delete('vote_sites', array('id', '=', $_GET['id']));
+					DB::getInstance()->delete('vote_sites', ['id', '=', $_GET['id']]);
 				} catch(Exception $e){
 					die($e->getMessage());
 				}
@@ -219,18 +221,21 @@ if(isset($_GET['action'])){
 	if(Input::exists()){
 		$errors = array();
 		if(Token::check(Input::get('token'))){
-			$validate = new Validate();
-			$validation = $validate->check($_POST, array(
-				'message' => array(
-					'max' => 2048
-				),
-				'link_location' => array(
-					'required' => true
-				),
-				'icon' => array(
-					'max' => 64
-				)
-			));
+			$validation = Validate::check($_POST, [
+				'message' => [
+					Validate::MAX => 2048
+				],
+				'link_location' => [
+					Validate::REQUIRED => true,
+				],
+				'icon' => [
+					Validate::MAX => 64
+				]
+            ])->messages([
+                'message' => [
+					Validate::MAX => $vote_language->get('vote', 'message_maximum')
+				]
+			]);
 
 			if($validation->passed()){
 				try {
@@ -258,12 +263,10 @@ if(isset($_GET['action'])){
 					$cache->store('vote_icon', Input::get('icon'));
 
 					// Update Vote Message
-					$message_id = $queries->getWhere('vote_settings', array('name', '=', 'vote_message'));
-					$message_id = $message_id[0]->id;
-					$queries->update('vote_settings', $message_id, array(
+					DB::getInstance()->update('vote_settings', ['name', '=', 'vote_message'], [
 						'value' => Input::get('message'),
-					));
-
+					]);
+					
 					$success = $votingplugin_language->get('language', 'updated_successfully');
 				} catch(Exception $e){
 					$errors[] = $e->getMessage();
@@ -277,7 +280,8 @@ if(isset($_GET['action'])){
 	}
 
 	// Get vote sites from database
-	$vote_sites = $queries->getWhere('vote_sites', array('id', '<>', 0));
+	$vote_sites = DB::getInstance()->get('vote_sites', ['id', '<>', 0])->results();
+	
 	$sites_array = array();
 	if(count($vote_sites)){
 		foreach($vote_sites as $site){
@@ -298,7 +302,7 @@ if(isset($_GET['action'])){
 	$icon = $cache->retrieve('vote_icon');
 
 	// Get vote
-	$vote_message = $queries->getWhere('vote_settings', array('name', '=', 'vote_message'));
+	$vote_message = DB::getInstance()->get('vote_settings', ['name', '=', "vote_message"])->results();
 	$vote_message = Output::getClean($vote_message[0]->value);
 
 	$smarty->assign(array(
@@ -328,7 +332,7 @@ if(isset($_GET['action'])){
 
 
 // Load modules + template
-Module::loadPage($user, $pages, $cache, $smarty, array($navigation, $cc_nav, $mod_nav), $widgets);
+Module::loadPage($user, $pages, $cache, $smarty, [$navigation, $cc_nav, $staffcp_nav], $widgets, $template);
 
 if(Session::exists('staff_vote'))
 	$success = Session::flash('staff_vote');
@@ -409,7 +413,7 @@ die();
 			    <div class="panel-heading"><?php echo $votingplugin_language->get('language', 'vote_sites'); ?></div>
 				<div class="panel-body">
 				  <?php
-				  $vote_sites = $queries->getWhere('vote_sites', array('id', '<>', 0));
+				  $vote_sites = DB::getInstance()->get('vote_sites', ['id', '<>', 0])->results();
 				  if(!count($vote_sites)){
 				  ?>
 				  <div class="alert alert-warning"><?php echo $votingplugin_language->get('language', 'no_vote_sites'); ?></div>
@@ -544,7 +548,7 @@ die();
 						  die();
 					  }
 					  
-					  $site = $queries->getWhere('vote_sites', array('id', '=', $_GET['site']));
+					  $site = DB::getInstance()->get('vote_sites', ['id', '=', $_GET['id']])->results();
 					  if(!count($site)){
 						  Redirect::to(URL::build('/admin/vote'));
 						  die();
@@ -577,7 +581,7 @@ die();
 									  ));
 									  
 									  // Re-query
-									  $site = $queries->getWhere('vote_sites', array('id', '=', $_GET['site']));
+									  $site = DB::getInstance()->get('vote_sites', ['id', '=', $_GET['id']])->results();
 									  $site = $site[0];
 									  
 									  $success = true;

@@ -2,7 +2,7 @@
 /*
  *	Made by Samerton
  *  https://github.com/NamelessMC/Nameless/
- *  NamelessMC version 2.0.0-pr7
+ *  NamelessMC version 2.0.2
  *
  *  License: MIT
  *
@@ -15,7 +15,7 @@ $page_title = $votingplugin_language->get('language', 'vote');
 require_once(ROOT_PATH . '/core/templates/frontend_init.php');
 
 // Get message
-$vote_message = $queries->getWhere("vote_settings", array("name", "=", "vote_message"));
+$vote_message = DB::getInstance()->get("vote_settings", ["name", "=", "vote_message"])->results();
 $vote_message = $vote_message[0]->value;
 
 // Is vote message empty?
@@ -24,7 +24,7 @@ if(!empty($vote_message)){
 }
 
 // Get sites from database
-$sites = $queries->getWhere("vote_sites", array("id", "<>", 0));
+$sites = DB::getInstance()->get("vote_sites", ["id", "<>", 0])->results();
 
 $sites_array = array();
 foreach($sites as $site){
@@ -94,7 +94,7 @@ if(defined('VOTING_PLUGIN')){
 							$profile = null;
 							$nickname = null;
 							$style = null;
-							$avatar = Util::getAvatarFromUUID($uuid);
+							$avatar = AvatarSource::getAvatarFromUUID($uuid);
 						}
 
 						$results[] = array(
@@ -157,7 +157,7 @@ if(!isset($error)){
 }
 
 // Load modules + template
-Module::loadPage($user, $pages, $cache, $smarty, array($navigation, $cc_nav, $mod_nav), $widgets);
+Module::loadPage($user, $pages, $cache, $smarty, [$navigation, $cc_nav, $staffcp_nav], $widgets, $template);
 
 $page_load = microtime(true) - $start;
 define('PAGE_LOAD_TIME', str_replace('{x}', round($page_load, 3), $language->get('general', 'page_loaded_in')));

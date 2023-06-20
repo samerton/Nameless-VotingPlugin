@@ -25,7 +25,7 @@ class VotingPlugin_Module extends Module {
 		parent::__construct($this, $name, $author, $module_version, $nameless_version);
 
 		// Define URLs which belong to this module
-		$pages->add('VotingPlugin', '/vote', 'pages/vote.php');
+		$pages->add('VotingPlugin', '/vote', 'pages/vote.php', 'vote');
 		$pages->add('VotingPlugin', '/panel/vote', 'pages/panel.php');
 	}
 

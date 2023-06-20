@@ -29,7 +29,12 @@
                                 </div>
                             </div>
                         </div>
-                        <br /><br />
+                        <div class="ui divider"></div>
+
+                        {if $MESSAGE_ENABLED}
+                            <div class="ui info message">{$MESSAGE}</div>
+                        {/if}
+
                         {if count($RESULTS)}
                             <table class="ui stackable table">
                                 <colgroup>

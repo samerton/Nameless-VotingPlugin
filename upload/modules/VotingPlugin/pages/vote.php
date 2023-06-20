@@ -177,7 +177,7 @@ $smarty->assign(array(
     'ALL_TIME_LINK' => URL::build('/vote/', 'order=all'),
     'ORDER' => $votingplugin_language->get('order'),
     'VOTE_SITES' => $votingplugin_language->get('vote_sites'),
-    'MESSAGE_ENABLED' => !is_null($vote_message),
+    'MESSAGE_ENABLED' => !empty($vote_message),
     'MESSAGE' => $vote_message ? Output::getClean($vote_message) : '',
     'VOTE_SITES_LIST' => $sites_array,
 ));

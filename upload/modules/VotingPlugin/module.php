@@ -2,7 +2,7 @@
 /*
  *	Made by Samerton
  *  https://github.com/NamelessMC/Nameless/
- *  NamelessMC version 2.0.0-pr7
+ *  NamelessMC version 2.1.1
  *
  *  License: MIT
  *
@@ -10,16 +10,17 @@
  */
 
 class VotingPlugin_Module extends Module {
-	private $_vote_language, $_user;
+	private Language $_vote_language;
+    private User $_user;
 
 	public function __construct($vote_language, $pages, $user){
 		$this->_vote_language = $vote_language;
 		$this->_user = $user;
 
 		$name = 'VotingPlugin';
-		$author = '<a href="https://samerton.me" target="_blank" rel="nofollow noopener">Samerton</a>';
-		$module_version = '1.0.2';
-		$nameless_version = '2.0.0-pr10';
+		$author = '<a href="https://samerton.dev" target="_blank" rel="nofollow noopener">Samerton</a>';
+		$module_version = '1.0.3';
+		$nameless_version = '2.1.1';
 
 		parent::__construct($this, $name, $author, $module_version, $nameless_version);
 
@@ -29,47 +30,22 @@ class VotingPlugin_Module extends Module {
 	}
 
 	public function onInstall(){
-		// Queries
-		$queries = new Queries();
-
 		try {
-			$queries->createTable("vote_settings", " `id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(20) NOT NULL, `value` varchar(2048) NOT NULL, PRIMARY KEY (`id`)", "ENGINE=InnoDB DEFAULT CHARSET=latin1");
+			DB::getInstance()->createTable("vote_settings", " `id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(20) NOT NULL, `value` varchar(2048) NOT NULL, PRIMARY KEY (`id`)");
 
 			// Insert data
-			$queries->create('vote_settings', array(
+			DB::getInstance()->insert('vote_settings', array(
 				'name' => 'vote_message',
 				'value' => 'You can manage this vote module in StaffCP -> Vote'
 			));
-			$queries->create('vote_sites', array(
-				'site' => 'https://mccommunity.net/',
-				'name' => 'MCCommunity (Example)'
-			));
-			$queries->create('vote_sites', array(
-				'site' => 'http://planetminecraft.com/',
-				'name' => 'PlanetMinecraft (Example)'
-			));
 		} catch(Exception $e){
 			// Error - table probably already exists
 		}
 
 		try {
-			$queries->createTable("vote_sites", " `id` int(11) NOT NULL AUTO_INCREMENT, `site` varchar(512) NOT NULL, `name` varchar(64) NOT NULL, PRIMARY KEY (`id`)", "ENGINE=InnoDB DEFAULT CHARSET=latin1");
+			DB::getInstance()->createTable("vote_sites", " `id` int(11) NOT NULL AUTO_INCREMENT, `site` varchar(512) NOT NULL, `name` varchar(64) NOT NULL, PRIMARY KEY (`id`)");
 		} catch(Exception $e){
 			// Error - table probably already exists
-		}
-
-		try {
-			// Update main admin group permissions
-			$group = $queries->getWhere('groups', array('id', '=', 2));
-			$group = $group[0];
-
-			$group_permissions = json_decode($group->permissions, TRUE);
-			$group_permissions['admincp.vote'] = 1;
-
-			$group_permissions = json_encode($group_permissions);
-			$queries->update('groups', 2, array('permissions' => $group_permissions));
-		} catch(Exception $e){
-			// Error
 		}
 
 		// Config check
@@ -89,10 +65,10 @@ class VotingPlugin_Module extends Module {
 		// No actions necessary
 	}
 
-	public function onPageLoad($user, $pages, $cache, $smarty, $navs, $widgets, $template){
+	public function onPageLoad(User $user, Pages $pages, Cache $cache, Smarty $smarty, iterable $navs, Widgets $widgets, ?TemplateBase $template) {
 		// Permissions
 		PermissionHandler::registerPermissions('VotingPlugin', array(
-			'admincp.vote' => $this->_vote_language->get('language', 'vote')
+			'admincp.vote' => $this->_vote_language->get('vote')
 		));
 
 		// Navigation link location
@@ -125,15 +101,15 @@ class VotingPlugin_Module extends Module {
 		switch($link_location){
 			case 1:
 				// Navbar
-				$navs[0]->add('vote', $this->_vote_language->get('language', 'vote'), URL::build('/vote'), 'top', null, $vote_order, $icon);
+				$navs[0]->add('vote', $this->_vote_language->get('vote'), URL::build('/vote'), 'top', null, $vote_order, $icon);
 				break;
 			case 2:
 				// "More" dropdown
-				$navs[0]->addItemToDropdown('more_dropdown', 'vote', $this->_vote_language->get('language', 'vote'), URL::build('/vote'), 'top', null, $icon, $vote_order);
+				$navs[0]->addItemToDropdown('more_dropdown', 'vote', $this->_vote_language->get('vote'), URL::build('/vote'), 'top', null, $icon, $vote_order);
 				break;
 			case 3:
 				// Footer
-				$navs[0]->add('vote', $this->_vote_language->get('language', 'vote'), URL::build('/vote'), 'footer', null, $vote_order, $icon);
+				$navs[0]->add('vote', $this->_vote_language->get('vote'), URL::build('/vote'), 'footer', null, $vote_order, $icon);
 				break;
 		}
 
@@ -156,21 +132,21 @@ class VotingPlugin_Module extends Module {
 					$icon = $cache->retrieve('voting_plugin_icon');
 				}
 
-				$navs[2]->add('vote_divider', mb_strtoupper($this->_vote_language->get('language', 'vote'), 'UTF-8'), 'divider', 'top', null, $order, '');
-				$navs[2]->add('vote', $this->_vote_language->get('language', 'vote'), URL::build('/panel/vote'), 'top', null, ($order + 0.1), $icon);
+				$navs[2]->add('vote_divider', mb_strtoupper($this->_vote_language->get('vote'), 'UTF-8'), 'divider', 'top', null, $order, '');
+				$navs[2]->add('vote', $this->_vote_language->get('vote'), URL::build('/panel/vote'), 'top', null, ($order + 0.1), $icon);
 			}
 		}
 	}
 
-	public static function configCheck($user, $language, $sendNotice = false){
+	public static function configCheck(User $user, Language $language, $sendNotice = false){
 		// Config check
 		if(!file_exists(ROOT_PATH . '/modules/VotingPlugin/config.php')){
 			if(!is_writable(ROOT_PATH . '/modules/VotingPlugin')){
 				if($sendNotice && $user->hasPermission('admincp.modules')){
 					if($sendNotice === 'session')
-						Session::flash('admin_modules_error', $language->get('language', 'config_not_writable'));
+						Session::flash('admin_modules_error', $language->get('config_not_writable'));
 					else
-						Core_Module::addNotice(URL::build('/panel/modules'), $language->get('language', 'config_not_writable'));
+						Core_Module::addNotice(URL::build('/panel/modules'), $language->get('config_not_writable'));
 				}
 			} else {
 				try {
@@ -197,4 +173,8 @@ class VotingPlugin_Module extends Module {
 				define('VOTING_PLUGIN', true);
 		}
 	}
+
+    public function getDebugInfo(): array {
+        return [];
+    }
 }

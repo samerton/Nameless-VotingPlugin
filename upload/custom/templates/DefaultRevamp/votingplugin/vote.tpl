@@ -51,7 +51,7 @@
                                 <tbody>
                                 {foreach from=$RESULTS item=result}
                                     <tr>
-                                        <td>{if $result.exists eq true}<img src="{$result.avatar}" style="max-height:25px;max-width:25px;" class="rounded-circle" alt="{$result.name}" /> <a href="{$result.profile}" style="{$result.user_style}">{$result.nickname}</a>{else}<img src="{$result.avatar}" style="max-height:25px;max-width:25px;" class="rounded-circle" alt="{$result.name}" /> {$result.name}{/if}</td>
+                                        <td>{if $result.exists eq true}<img src="{$result.avatar}" class="ui mini circular middle aligned image" alt="{$result.name}" /> <a href="{$result.profile}" style="{$result.user_style}">{$result.nickname}</a>{else}<img src="{$result.avatar}" class="ui mini circular middle aligned image" alt="{$result.name}" /> {$result.name}{/if}</td>
                                         <td>{$result.daily}</td>
                                         <td>{$result.weekly}</td>
                                         <td>{$result.monthly}</td>
@@ -75,7 +75,7 @@
                 </div>
             </div>
         </div>
-    </div>
-{/if}
+    {/if}
+</div>
 
 {include file='footer.tpl'}

@@ -9,6 +9,8 @@
     "icon": "Icon",
     "icon_example": "Full HTML",
     "icon_maximum": "Icon must be a maximum of {{count}} characters",
+    "last_month": "Last month",
+    "last_months_votes": "Last Month",
     "link_location": "Link location",
     "link_location_required": "Please select a link location",
     "message": "Message to display at top of Vote page (This can be left blank)",

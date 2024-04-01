@@ -67,6 +67,9 @@ if (defined('VOTING_PLUGIN')) {
 			case 'weekly':
 				$order = 'WeeklyTotal';
 				break;
+            case 'last_month':
+                $order = 'LastMonthTotal';
+                break;
 			default:
 				$order = 'MonthTotal';
 				break;
@@ -100,6 +103,7 @@ if (defined('VOTING_PLUGIN')) {
                     uuid,
                     PlayerName,
                     MonthTotal,
+                    LastMonthTotal,
                     AllTimeTotal,
                     DailyTotal,
                     WeeklyTotal
@@ -142,6 +146,7 @@ if (defined('VOTING_PLUGIN')) {
                         'user_style' => $style,
                         'exists' => $exists,
                         'profile' => $profile,
+                        'last_month' => $result->LastMonthTotal,
                         'monthly' => $result->MonthTotal,
                         'alltime' => $result->AllTimeTotal,
                         'daily' => $result->DailyTotal,
@@ -165,12 +170,15 @@ $smarty->assign(array(
     'DAILY_VOTES' => $votingplugin_language->get('daily_votes'),
     'WEEKLY_VOTES' => $votingplugin_language->get('weekly_votes'),
     'MONTHLY_VOTES' => $votingplugin_language->get('monthly_votes'),
+    'LAST_MONTHS_VOTES' => $votingplugin_language->get('last_months_votes'),
     'ALL_TIME_VOTES' => $votingplugin_language->get('all_time_votes'),
     'TOP_VOTERS' => $votingplugin_language->get('top_voters'),
+    'LAST_MONTH' => $votingplugin_language->get('last_month'),
     'THIS_MONTH' => $votingplugin_language->get('this_month'),
     'THIS_WEEK' => $votingplugin_language->get('this_week'),
     'TODAY' => $votingplugin_language->get('today'),
     'ALL_TIME' => $votingplugin_language->get('all_time'),
+    'LAST_MONTH_LINK' => URL::build('/vote/', 'order=last_month'),
     'THIS_MONTH_LINK' => URL::build('/vote/', 'order=monthly'),
     'THIS_WEEK_LINK' => URL::build('/vote/', 'order=weekly'),
     'TODAY_LINK' => URL::build('/vote/', 'order=daily'),
@@ -188,7 +196,7 @@ Module::loadPage($user, $pages, $cache, $smarty, array($navigation, $cc_nav, $st
 $template->onPageLoad();
 
 $smarty->assign('WIDGETS_LEFT', $widgets->getWidgets('left'));
-$smarty->assign('WIDGETS_RIGHT', $widgets->getWidgets());
+$smarty->assign('WIDGETS_RIGHT', $widgets->getWidgets('right'));
 
 require_once ROOT_PATH . '/core/templates/navbar.php';
 require_once ROOT_PATH . '/core/templates/footer.php';

@@ -25,6 +25,7 @@
                                     <a class="item" href="{$TODAY_LINK}">{$TODAY}</a>
                                     <a class="item" href="{$THIS_WEEK_LINK}">{$THIS_WEEK}</a>
                                     <a class="item" href="{$THIS_MONTH_LINK}">{$THIS_MONTH}</a>
+                                    <a class="item" href="{$LAST_MONTH_LINK}">{$LAST_MONTH}</a>
                                     <a class="item" href="{$ALL_TIME_LINK}">{$ALL_TIME}</a>
                                 </div>
                             </div>
@@ -38,8 +39,9 @@
                         {if count($RESULTS)}
                             <table class="ui stackable table">
                                 <colgroup>
-                                    <col span="1" style="width: 40%;">
+                                    <col span="1" style="width: 25%;">
                                     <col span="1" style="width: 15%;">
+                                    <col span="1" style="width: 15%">
                                     <col span="1" style="width: 15%">
                                     <col span="1" style="width: 15%">
                                     <col span="1" style="width: 15%">
@@ -50,6 +52,7 @@
                                     <th>{$DAILY_VOTES}</th>
                                     <th>{$WEEKLY_VOTES}</th>
                                     <th>{$MONTHLY_VOTES}</th>
+                                    <th>{$LAST_MONTHS_VOTES}</th>
                                     <th>{$ALL_TIME_VOTES}</th>
                                 </tr>
                                 </thead>
@@ -60,6 +63,7 @@
                                         <td>{$result.daily}</td>
                                         <td>{$result.weekly}</td>
                                         <td>{$result.monthly}</td>
+                                        <td>{$result.last_month}</td>
                                         <td>{$result.alltime}</td>
                                     </tr>
                                 {/foreach}

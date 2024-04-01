@@ -19,8 +19,8 @@ class VotingPlugin_Module extends Module {
 
 		$name = 'VotingPlugin';
 		$author = '<a href="https://samerton.dev" target="_blank" rel="nofollow noopener">Samerton</a>';
-		$module_version = '1.0.3';
-		$nameless_version = '2.1.1';
+		$module_version = '1.0.4';
+		$nameless_version = '2.1.2';
 
 		parent::__construct($this, $name, $author, $module_version, $nameless_version);
 

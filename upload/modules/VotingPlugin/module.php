@@ -19,8 +19,8 @@ class VotingPlugin_Module extends Module {
 
 		$name = 'VotingPlugin';
 		$author = '<a href="https://samerton.dev" target="_blank" rel="nofollow noopener">Samerton</a>';
-		$module_version = '1.0.4';
-		$nameless_version = '2.1.2';
+		$module_version = '1.1.0';
+		$nameless_version = '2.2.1';
 
 		parent::__construct($this, $name, $author, $module_version, $nameless_version);
 
@@ -65,7 +65,7 @@ class VotingPlugin_Module extends Module {
 		// No actions necessary
 	}
 
-	public function onPageLoad(User $user, Pages $pages, Cache $cache, Smarty $smarty, iterable $navs, Widgets $widgets, ?TemplateBase $template) {
+	public function onPageLoad(User $user, Pages $pages, Cache $cache, $smarty, iterable $navs, Widgets $widgets, TemplateBase $template) {
 		// Permissions
 		PermissionHandler::registerPermissions('VotingPlugin', array(
 			'admincp.vote' => $this->_vote_language->get('vote')

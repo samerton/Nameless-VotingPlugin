@@ -2,7 +2,7 @@
 A VotingPlugin module for the NamelessMC website software. Displays a list of the top voters from your server as well as a list of available voting sites (configurable through the StaffCP).
 
 ## Requirements:
-- NamelessMC version 2.1.0 onwards
+- NamelessMC version 2.2.1 onwards
 - [VotingPlugin](https://www.spigotmc.org/resources/votingplugin.15358/) plugin for Spigot, configured to use a MySQL database
 
 ## Installation:
